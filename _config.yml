@@ -4,7 +4,7 @@ relative_links:
   enabled: true
   collections: true
 include:
-  - readme.md
+  - README.md
 theme: jekyll-theme-cayman
 title: Belajar Sequelize Association
 baseurl: "education-intermediate-sequelize-one-to-n"
