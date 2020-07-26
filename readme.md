@@ -171,6 +171,7 @@ Requirement dari aplikasi ini adalah:
 ```
 Creators
 ```
+
 | Kolom              | Tipe         | Deskripsi   |
 |:-------------------|:-------------|:------------|
 | id                 | SERIAL       | PRIMARY KEY |
@@ -184,6 +185,7 @@ Creators
 ```
 Videos
 ```
+
 | Kolom              | Tipe         | Deskripsi   |
 |:-------------------|:-------------|:------------|
 | id                 | SERIAL       | PRIMARY KEY |
