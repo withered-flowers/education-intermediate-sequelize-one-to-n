@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>List of Videos</title>
+  <%- include('partials/include-css.ejs') %>
+</head>
+
+<body>
+  <%- include('partials/header.ejs') %>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-sm">
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">ID</th>
+              <th scope="col">Name</th>
+              <th scope="col">Link</th>
+              <th scope="col">Channel</th>
+              <th scope="col">View Count</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% dataVideos.forEach(elem => { %>
+              <tr>
+                <td><%= elem.id %></td>
+                <td><%= elem.name %></td>
+                <td><%= elem.link %></td>
+                <td><%= elem.channel %></td>
+                <td><%= elem.view_count %></td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <%- include('partials/footer.ejs') %>
+  <%- include('partials/include-js.ejs') %>
+</body>
+
+</html>

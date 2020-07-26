@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Index</title>
+  <%- include('partials/include-css.ejs') %>
+</head>
+
+<body>
+  <%- include('partials/header.ejs') %>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-sm">
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">ID</th>
+              <th scope="col">Name</th>
+              <th scope="col">Channel</th>
+              <th scope="col">Joined</th>
+              <th scope="col">Subs Count</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% dataCreators.forEach(elem => { %>
+              <tr>
+                <td><%= elem.id %></td>
+                <td><%= elem.name %></td>
+                <td><%= elem.channel %></td>
+                <td><%= elem.joined %></td>
+                <td><%= elem.subscribers_count %></td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <%- include('partials/footer.ejs') %>
+  <%- include('partials/include-js.ejs') %>
+</body>
+
+</html>
