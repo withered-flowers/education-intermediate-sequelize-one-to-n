@@ -43,7 +43,7 @@ ini dengan cara `sequelize` itu sendiri !
 
 Contohnya bagaimana ?
 
-1-to-1
+1-to-1  
 ![One to One](assets/one-to-one.png "One to One")
 <!-- ```
 ┌────────────┐          ┌────────────────┐
@@ -96,7 +96,7 @@ mendefinisikan association pada method associate yang ada.
   }
 ```
 
-1-to-n
+1-to-n  
 ![One to Many](assets/one-to-many.png "One to Many")
 <!-- ```
 ┌───────────────┐          ┌────────────────┐
