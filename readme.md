@@ -44,7 +44,8 @@ ini dengan cara `sequelize` itu sendiri !
 Contohnya bagaimana ?
 
 1-to-1
-```
+![One to One](assets/one-to-one.png "One to One")
+<!-- ```
 ┌────────────┐          ┌────────────────┐
 │   Orangs   │          │   Profils      │
 ├────────────┤          ├────────────────┤
@@ -52,7 +53,7 @@ Contohnya bagaimana ?
 │   name     │     └────│  orang_id (FK) │
 │   pass     │          │  nama_profil   │
 └────────────┘          └────────────────┘
-```
+``` -->
 
 Dalam `sequelize` punya `Model`, berarti kita harus:
 * Mendefinisikan bahwa `Orang` memiliki sebuah `Profil`
@@ -96,7 +97,8 @@ mendefinisikan association pada method associate yang ada.
 ```
 
 1-to-n
-```
+![One to Many](assets/one-to-many.png "One to Many")
+<!-- ```
 ┌───────────────┐          ┌────────────────┐
 │   Creators    │          │     Videos     │
 ├───────────────┤          ├────────────────┤
@@ -106,7 +108,7 @@ mendefinisikan association pada method associate yang ada.
 │    joined     │     └────│  channel (FK)  │
 │   sub_count   │          │   view_count   │
 └───────────────┘          └────────────────┘
-```
+``` -->
 
 Dalam `sequelize` punya `Model` ini, berarti kita harus:
 * Mendefinsikan bahwa `Creator` memiliki banyak `Video`
