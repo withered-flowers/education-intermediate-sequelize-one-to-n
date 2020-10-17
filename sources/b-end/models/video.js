@@ -21,7 +21,8 @@ module.exports = (sequelize, DataTypes) => {
     name: DataTypes.STRING,
     link: DataTypes.STRING,
     channel: DataTypes.STRING,
-    view_count: DataTypes.INTEGER
+    view_count: DataTypes.INTEGER,
+    CreatorId: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'Video',
