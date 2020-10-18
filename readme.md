@@ -45,15 +45,15 @@ Contohnya bagaimana ?
 
 1-to-1  
 ![One to One](assets/one-to-one.png "One to One")
-<!-- ```
+<!--
 ┌────────────┐          ┌────────────────┐
 │   Orangs   │          │   Profils      │
 ├────────────┤          ├────────────────┤
 │   id (PK)  │─────┐    │   id (PK)      │
-│   name     │     └────│  orang_id (FK) │
-│   pass     │          │  nama_profil   │
+│   name     │     │    │  nama_profil   │
+│   pass     │     └────│  OrangId (FK)  │
 └────────────┘          └────────────────┘
-``` -->
+-->
 
 Dalam `sequelize` punya `Model`, berarti kita harus:
 * Mendefinisikan bahwa `Orang` memiliki sebuah `Profil`
@@ -74,7 +74,7 @@ mendefinisikan association pada method associate yang ada.
     //   e.g. OrangId pada Profils
     Orang.hasOne(Profil, {
       sourceKey: 'id',
-      foreignKey: 'orang_id'
+      foreignKey: 'OrangId'
     });
   }
 ```
@@ -90,7 +90,7 @@ mendefinisikan association pada method associate yang ada.
     //   by default akan melihat apakah pada Source memiliki TargetId
     //   e.g. OrangId pada Profils
     Profil.belongsTo(Orang, {
-      foreignKey: 'orang_id',
+      foreignKey: 'OrangId',
       targetKey: 'id'
     });
   }
@@ -98,17 +98,18 @@ mendefinisikan association pada method associate yang ada.
 
 1-to-n  
 ![One to Many](assets/one-to-many.png "One to Many")
-<!-- ```
+<!--
 ┌───────────────┐          ┌────────────────┐
 │   Creators    │          │     Videos     │
 ├───────────────┤          ├────────────────┤
-│   id (PK)     │          │    id (PK)     │
-│    name       │          │     name       │
-│  channel (PK) │─────┐    │     link       │
-│    joined     │     └────│  channel (FK)  │
-│   sub_count   │          │   view_count   │
+│   id (PK)     │─────┐    │    id (PK)     │
+│    name       │     │    │     name       │
+│   channel     │     │    │     link       │
+│    joined     │     │    │    channel     │
+│   sub_count   │     │    │   view_count   │
+│               │     └────│ CreatorId (FK) │
 └───────────────┘          └────────────────┘
-``` -->
+-->
 
 Dalam `sequelize` punya `Model` ini, berarti kita harus:
 * Mendefinsikan bahwa `Creator` memiliki banyak `Video`
@@ -129,7 +130,7 @@ mendefinisikan association pada method associate yang ada.
     //   e.g. CreatorId pada Videos
     Creator.hasMany(models.Video, {
       sourceKey: 'channel',
-      foreignKey: 'channel'
+      foreignKey: 'OrangId'
     });
   }
 ```
@@ -145,7 +146,7 @@ mendefinisikan association pada method associate yang ada.
     //   by default akan melihat apakah pada Source memiliki TargetId
     //   e.g. CreatorId pada Videos
     Video.belongsTo(models.Creator, {
-      foreignKey: 'channel',
+      foreignKey: 'OrangId',
       targetKey: 'channel'
     });
   }
@@ -453,7 +454,7 @@ Modifikasi ini dapat dilihat pada kode di bawah:
       // define association here
       Creator.hasMany(models.Video, {
         sourceKey: 'channel',
-        foreignKey: 'channel'
+        foreignKey: 'CreatorId'
       });
     }
   };
@@ -465,7 +466,7 @@ Modifikasi ini dapat dilihat pada kode di bawah:
     static associate(models) {
       // define association here
       Video.belongsTo(models.Creator, {
-        foreignKey: 'channel',
+        foreignKey: 'CreatorId',
         targetKey: 'channel'
       });
     }
