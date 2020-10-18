@@ -45,7 +45,8 @@ Contohnya bagaimana ?
 
 1-to-1  
 ![One to One](assets/one-to-one.png "One to One")
-<!--
+<!-- 
+```
 ┌────────────┐          ┌────────────────┐
 │   Orangs   │          │   Profils      │
 ├────────────┤          ├────────────────┤
@@ -53,7 +54,7 @@ Contohnya bagaimana ?
 │   name     │     │    │  nama_profil   │
 │   pass     │     └────│  OrangId (FK)  │
 └────────────┘          └────────────────┘
--->
+``` -->
 
 Dalam `sequelize` punya `Model`, berarti kita harus:
 * Mendefinisikan bahwa `Orang` memiliki sebuah `Profil`
@@ -98,7 +99,7 @@ mendefinisikan association pada method associate yang ada.
 
 1-to-n  
 ![One to Many](assets/one-to-many.png "One to Many")
-<!--
+<!-- ```
 ┌───────────────┐          ┌────────────────┐
 │   Creators    │          │     Videos     │
 ├───────────────┤          ├────────────────┤
@@ -109,7 +110,7 @@ mendefinisikan association pada method associate yang ada.
 │   sub_count   │     │    │   view_count   │
 │               │     └────│ CreatorId (FK) │
 └───────────────┘          └────────────────┘
--->
+``` -->
 
 Dalam `sequelize` punya `Model` ini, berarti kita harus:
 * Mendefinsikan bahwa `Creator` memiliki banyak `Video`
@@ -129,7 +130,7 @@ mendefinisikan association pada method associate yang ada.
     //   by default akan melihat apakah pada Target memiliki SourceId
     //   e.g. CreatorId pada Videos
     Creator.hasMany(models.Video, {
-      sourceKey: 'channel',
+      sourceKey: 'id',
       foreignKey: 'OrangId'
     });
   }
@@ -147,7 +148,7 @@ mendefinisikan association pada method associate yang ada.
     //   e.g. CreatorId pada Videos
     Video.belongsTo(models.Creator, {
       foreignKey: 'OrangId',
-      targetKey: 'channel'
+      targetKey: 'id'
     });
   }
 ```
@@ -323,6 +324,71 @@ module.exports = {
 };
 ```
 
+### Langkah 4 - Memodifikasi Model untuk mendefinisikan asosiasi
+Karena adanya relasi antara dua tabel `Creators` (id) dengan `Videos`
+(CreatorId), maka selanjutnya kita akan menambah kolom dan menyambungkan
+kolom dengan asosiasi-nya.
+
+Apabila hanya membutuhkan `CreatorId` saja, maka kita hanya butuh untuk:
+* Membuat file migrations baru untuk `Videos`
+* Menambahkan kolom `CreatorId` pada `Videos` (Migration)
+* Menambahkan kolom `CreatorId` pada `Video` (Model)
+* Tidak perlu menambahkan / mendefinisikan Foreign Key pada Tabel `Videos`
+
+<!-- Namun, karena kita sudah memiliki data bawaan berupa `channel` yang terhubung
+antara `Videos` dan `Creators`, maka yang dibutuhkan sekarang, hanya:
+* Mendefinisikan asosiasi `Videos` adalah milik `Creators` via `channel`.
+* Mendefinisikan asosiasi `Creators` memiliki banyak `Videos` via `channel`. -->
+
+Langkah-langkahnya adalah:
+* Membuat file migration baru dengan cara mengetik perintah:
+  `npx sequelize-cli migration:generate --name add-column-creatorid-to-videos`
+* Menambahkan kode untuk menambah kolom `CreatorId` pada migration file yang
+  dibuat. Kode dapat dilihat di bawah ini
+```javascript
+// File: migrations/<timestamp>-add-column-creatorid-to-videos
+module.exports = {
+  up: (queryInterface, Sequelize) => {
+    // Di sini kita menggunakan addColumn
+    // untuk menambahkan kolom CreatorId
+    return queryInterface.addColumn('Videos', 'CreatorId', Sequelize.INTEGER);
+  },
+
+  down: (queryInterface, Sequelize) => {
+    // Di sini kita akan menghapus 
+    // kolom CreatorId
+    return queryInterface.removeColumn('Videos', 'CreatorId');
+  }
+};
+```
+* Selanjutnya, kita akan menambahkan asosiasi pada `models/creator.js` dan 
+  `models/video.js`
+```javascript
+// File: models/creator.js
+  class Creator extends Model {
+    static associate(models) {
+      // define association here
+      Creator.hasMany(models.Video, {
+        sourceKey: 'id',
+        foreignKey: 'CreatorId'
+      });
+    }
+  };
+```
+
+```javascript
+// File: models/video.js
+  class Video extends Model {
+    static associate(models) {
+      // define association here
+      Video.belongsTo(models.Creator, {
+        foreignKey: 'CreatorId',
+        targetKey: 'id'
+      });
+    }
+  };
+```
+
 ### Langkah 4 - Membuat seeder
 Selanjutnya, setelah tabel terbentuk, kita akan memasukkan data yang kita
 miliki dalam `data/creator.json` dan `data/videos.json` menjadi data dalam
@@ -429,48 +495,6 @@ module.exports = {
     return queryInterface.bulkDelete('Videos', null, {});
   }
 };
-```
-
-### Langkah 5 - Memodifikasi Model untuk mendefinisikan asosiasi
-Karena di sini memiliki relasi yang unik, berbeda dengan hanya sekedar 
-menambahkan `CreatorId` saja.
-
-Apabila hanya membutuhkan `CreatorId` saja, maka kita hanya butuh untuk:
-* Membuat file migrations baru untuk `Videos`
-* Menambahkan kolom `CreatorId` pada `Videos` (Migration)
-* Menambahkan kolom `CreatorId` pada `Video` (Model)
-* Tidak perlu menambahkan / mendefinisikan Foreign Key pada Tabel `Videos`
-
-Namun, karena kita sudah memiliki data bawaan berupa `channel` yang terhubung
-antara `Videos` dan `Creators`, maka yang dibutuhkan sekarang, hanya:
-* Mendefinisikan asosiasi `Videos` adalah milik `Creators` via `channel`.
-* Mendefinisikan asosiasi `Creators` memiliki banyak `Videos` via `channel`.
-
-Modifikasi ini dapat dilihat pada kode di bawah:
-```javascript
-// File: models/creator.js
-  class Creator extends Model {
-    static associate(models) {
-      // define association here
-      Creator.hasMany(models.Video, {
-        sourceKey: 'channel',
-        foreignKey: 'CreatorId'
-      });
-    }
-  };
-```
-
-```javascript
-// File: models/video.js
-  class Video extends Model {
-    static associate(models) {
-      // define association here
-      Video.belongsTo(models.Creator, {
-        foreignKey: 'CreatorId',
-        targetKey: 'channel'
-      });
-    }
-  };
 ```
 
 Sampai dengan tahap ini, artinya kita sudah berhasil mendefinisikan asosiasi
