@@ -195,8 +195,9 @@ Videos
 | id                 | SERIAL       | PRIMARY KEY |
 | name               | VARCHAR(255) | NOT NULL    |
 | link               | VARCHAR(255) | NOT NULL    |
-| channel            | VARCHAR(255) | FOREIGN KEY |
+| channel            | VARCHAR(255) | NOT NULL    |
 | view_count         | INTEGER      | NOT NULL    |
+| CreatorId          | INTEGER      | FOREIGN KEY |
 | createdAt          | TIMESTAMP    | NOT NULL    |
 | updatedAt          | TIMESTAMP    | NOT NULL    |
 
