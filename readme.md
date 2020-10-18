@@ -45,19 +45,9 @@ Contohnya bagaimana ?
 
 1-to-1  
 ![One to One](assets/one-to-one.png "One to One")
-<!-- 
-```
-┌────────────┐          ┌────────────────┐
-│   Orangs   │          │   Profils      │
-├────────────┤          ├────────────────┤
-│   id (PK)  │─────┐    │   id (PK)      │
-│   name     │     │    │  nama_profil   │
-│   pass     │     └────│  OrangId (FK)  │
-└────────────┘          └────────────────┘
-``` -->
 
 Dalam `sequelize` punya `Model`, berarti kita harus:
-* Mendefinisikan bahwa `Orang` memiliki sebuah `Profil`
+* Mendefinisikan bahwa `Orang` memiliki sebuah `Profile`
 * Mendefinisikan bahwa `Profile` adalah bagian dari / milik `Orang`
 
 Caranya adalah, kita harus memodifikasi bagian `models` yang dibuat dengan
@@ -99,21 +89,9 @@ mendefinisikan association pada method associate yang ada.
 
 1-to-n  
 ![One to Many](assets/one-to-many.png "One to Many")
-<!-- ```
-┌───────────────┐          ┌────────────────┐
-│   Creators    │          │     Videos     │
-├───────────────┤          ├────────────────┤
-│   id (PK)     │─────┐    │    id (PK)     │
-│    name       │     │    │     name       │
-│   channel     │     │    │     link       │
-│    joined     │     │    │    channel     │
-│   sub_count   │     │    │   view_count   │
-│               │     └────│ CreatorId (FK) │
-└───────────────┘          └────────────────┘
-``` -->
 
 Dalam `sequelize` punya `Model` ini, berarti kita harus:
-* Mendefinsikan bahwa `Creator` memiliki banyak `Video`
+* Mendefinisikan bahwa `Creator` memiliki banyak `Video`
 * Mendefinisikan bahwa `Video` dimiliki oleh `Creator`
 
 Caranya adalah, kita harus memodifikasi bagian `models` yang dibuat dengan
@@ -336,11 +314,6 @@ Apabila hanya membutuhkan `CreatorId` saja, maka kita hanya butuh untuk:
 * Menambahkan kolom `CreatorId` pada `Video` (Model)
 * Tidak perlu menambahkan / mendefinisikan Foreign Key pada Tabel `Videos`
 
-<!-- Namun, karena kita sudah memiliki data bawaan berupa `channel` yang terhubung
-antara `Videos` dan `Creators`, maka yang dibutuhkan sekarang, hanya:
-* Mendefinisikan asosiasi `Videos` adalah milik `Creators` via `channel`.
-* Mendefinisikan asosiasi `Creators` memiliki banyak `Videos` via `channel`. -->
-
 Langkah-langkahnya adalah:
 * Membuat file migration baru dengan cara mengetik perintah:
   `npx sequelize-cli migration:generate --name add-column-creatorid-to-videos`
@@ -352,7 +325,15 @@ module.exports = {
   up: (queryInterface, Sequelize) => {
     // Di sini kita menggunakan addColumn
     // untuk menambahkan kolom CreatorId
-    return queryInterface.addColumn('Videos', 'CreatorId', Sequelize.INTEGER);
+    return queryInterface.addColumn('Videos', 'CreatorId', { 
+      type: Sequelize.INTEGER,
+      references: {
+        model: {
+          tableName: 'Creators',
+        },
+        key: 'id'
+      }
+    });
   },
 
   down: (queryInterface, Sequelize) => {
@@ -392,7 +373,7 @@ module.exports = {
 
 ### Langkah 4 - Membuat seeder
 Selanjutnya, setelah tabel terbentuk, kita akan memasukkan data yang kita
-miliki dalam `data/creator.json` dan `data/videos.json` menjadi data dalam
+miliki dalam `data/creators.json` dan `data/videos.json` menjadi data dalam
 tabel kita, oleh karena itu langkah-langkahnya adalah:
 * Membuat file seed dengan cara mengetik perintah 
   `npx sequelize-cli seed:generate --name seed-creators` dan
@@ -622,3 +603,33 @@ menampilkan data kombinasi `Association` tersebut !
 * [Fetching data Associations](https://sequelize.org/master/manual/assocs.html#basics-of-queries-involving-associations)
 * [Sequelize Documentation](https://sequelize.org/v5/)
 * [Sequelize API Ref](https://sequelize.org/v5/identifiers.html)
+
+
+<!-- 
+```
+┌────────────┐          ┌────────────────┐
+│   Orangs   │          │   Profils      │
+├────────────┤          ├────────────────┤
+│   id (PK)  │─────┐    │   id (PK)      │
+│   name     │     │    │  nama_profil   │
+│   pass     │     └────│  OrangId (FK)  │
+└────────────┘          └────────────────┘
+``` -->
+
+<!-- ```
+┌───────────────┐          ┌────────────────┐
+│   Creators    │          │     Videos     │
+├───────────────┤          ├────────────────┤
+│   id (PK)     │─────┐    │    id (PK)     │
+│    name       │     │    │     name       │
+│   channel     │     │    │     link       │
+│    joined     │     │    │    channel     │
+│   sub_count   │     │    │   view_count   │
+│               │     └────│ CreatorId (FK) │
+└───────────────┘          └────────────────┘
+``` -->
+
+<!-- Namun, karena kita sudah memiliki data bawaan berupa `channel` yang terhubung
+antara `Videos` dan `Creators`, maka yang dibutuhkan sekarang, hanya:
+* Mendefinisikan asosiasi `Videos` adalah milik `Creators` via `channel`.
+* Mendefinisikan asosiasi `Creators` memiliki banyak `Videos` via `channel`. -->
