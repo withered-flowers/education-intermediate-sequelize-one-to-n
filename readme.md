@@ -319,6 +319,7 @@ Langkah-langkahnya adalah:
   `npx sequelize-cli migration:generate --name add-column-creatorid-to-videos`
 * Menambahkan kode untuk menambah kolom `CreatorId` pada migration file yang
   dibuat. Kode dapat dilihat di bawah ini
+  
 ```javascript
 // File: migrations/<timestamp>-add-column-creatorid-to-videos
 module.exports = {
@@ -345,6 +346,7 @@ module.exports = {
 ```
 * Selanjutnya, kita akan menambahkan asosiasi pada `models/creator.js` dan 
   `models/video.js`
+
 ```javascript
 // File: models/creator.js
   class Creator extends Model {
