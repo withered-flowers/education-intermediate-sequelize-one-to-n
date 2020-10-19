@@ -109,7 +109,7 @@ mendefinisikan association pada method associate yang ada.
     //   e.g. CreatorId pada Videos
     Creator.hasMany(models.Video, {
       sourceKey: 'id',
-      foreignKey: 'OrangId'
+      foreignKey: 'CreatorId'
     });
   }
 ```
@@ -125,7 +125,7 @@ mendefinisikan association pada method associate yang ada.
     //   by default akan melihat apakah pada Source memiliki TargetId
     //   e.g. CreatorId pada Videos
     Video.belongsTo(models.Creator, {
-      foreignKey: 'OrangId',
+      foreignKey: 'CreatorId',
       targetKey: 'id'
     });
   }
