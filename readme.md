@@ -332,6 +332,8 @@ module.exports = {
         model: {
           tableName: 'Creators',
         },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
         key: 'id'
       }
     });
